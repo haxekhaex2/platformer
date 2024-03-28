@@ -1,3 +1,5 @@
+import Platform from "./platform.js";
+
 var config = {
 	type: Phaser.AUTO,
 	width: 480,
@@ -53,13 +55,6 @@ function create(){
 		repeat: -1
 	});
 	
-	this.anims.create({
-		key: "cube0_held",
-		frames: [{key: "cube0", frame: 4}],
-		frameRate: 2,
-		repeat: -1
-	});
-	
 	/* Initialize input handler. */
 	input = this.input.keyboard.addKeys({
 		"SPACE": Phaser.Input.Keyboard.KeyCodes.SPACE,
@@ -69,7 +64,12 @@ function create(){
 		"D": Phaser.Input.Keyboard.KeyCodes.D
 	});
 	
-	platforms = this.physics.add.group();
+	platforms = this.physics.add.group({
+		allowDrag: false,
+		allowGravity: false,
+		allowRotation: false,
+		immovable: true
+	});
 	
 	
 	/* Add background. */
@@ -82,7 +82,8 @@ function create(){
 	
 	/* Create platforms. */
 	for(let index = 0; index < 100; index++){
-		createPlatform(Phaser.Math.Between(-this.game.canvas.width / 2, this.game.canvas.width / 2), index * -200);
+		let platform = new Platform(this, Phaser.Math.Between(-this.game.canvas.width / 2, this.game.canvas.width / 2), index * -200);
+		platforms.add(platform);
 	}
 	
 	/* Create player. */
@@ -107,34 +108,6 @@ function update(time, delta){
 		player.setVelocityY(-1024);
 		this.sound.play("jump");
 	}
-	
-	/* Update platforms. */
-	platforms.children.iterate((child) => {
-		if(child.body.touching.up){
-			child.anims.play("cube0_held", true);
-			if(!child.held) this.sound.play("land");
-			child.held = true;
-		}else{
-			child.anims.play("cube0_default", true);
-			child.held = false;
-		}
-	});
-}
-
-/* Utility functions. */
-function createPlatform(x, y){
-	const PLATFORM_WIDTH = 200;
-	const PLATFORM_HEIGHT = 20;
-	const CUBE_WIDTH = 200;
-	const CUBE_HEIGHT = 200
-	let platform = platforms.create(x, y, "cube0");
-	platform.setSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
-	platform.setDisplaySize(CUBE_WIDTH, CUBE_HEIGHT);
-	//platform.setDisplayOrigin(CUBE_WIDTH / 2, CUBE_HEIGHT / 4 + platform.body.halfHeight);
-	platform.setOffset(0, CUBE_HEIGHT / 4);
-	platform.body.moves = false;
-	platform.body.immovable = true;
-	if(Math.round(Phaser.Math.Between(0, 2)) === 0) platform.flipX = true;
 }
 
 function platformCollision(player, platform){
