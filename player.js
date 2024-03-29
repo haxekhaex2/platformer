@@ -5,6 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		super(scene, x, y, "bug");
 		scene.physics.world.enableBody(this);
 		this.setDisplaySize(50, 50);
+		scene.cameras.main.startFollow(this, true, .5, .5, 0, 0);
 		
 		this.dashTime = 0;
 		this.abilityAvailable = false;
@@ -12,7 +13,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
 	collide(object){
-		if(object.constructor.name === "Platform"){
+		if(object.constructor.name === "Platform" || object.constructor.name === "BouncyPlatform"){
 			if(this.body.velocity.y < 0) return false;
 		}
 		
@@ -20,9 +21,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	update(time, delta){
-		/* Move camera. */
-		this.scene.cameras.main.setScroll(this.x - this.scene.game.canvas.width / 2, this.y - this.scene.game.canvas.height / 2);
-		
 		/* Input handling. */
 		let direction = 0;
 		if(input.A.isDown) direction -= 1;

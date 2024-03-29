@@ -1,4 +1,5 @@
 import Platform from "./platform.js";
+import BouncyPlatform from "./bouncy_platform.js";
 import Player from "./player.js";
 
 var config = {
@@ -39,38 +40,10 @@ function preload(){
 	/* Load audio. */
 	this.load.audio("jump", "assets/jump.wav");
 	this.load.audio("land", "assets/land.wav");
+	this.load.audio("boing", "assets/boing.wav");
 }
 
 function create(){
-	/* Initialize animations. */
-	this.anims.create({
-		key: "cube0_default",
-		frames: this.anims.generateFrameNumbers("cube0", {start: 0, end: 1}),
-		frameRate: 4,
-		repeat: -1
-	});
-	
-	this.anims.create({
-		key: "cube0_held",
-		frames: this.anims.generateFrameNumbers("cube0", {start: 2, end: 3}),
-		frameRate: 2,
-		repeat: -1
-	});
-	
-	this.anims.create({
-		key: "cube1_default",
-		frames: this.anims.generateFrameNumbers("cube1", {start: 0, end: 1}),
-		frameRate: 4,
-		repeat: -1
-	});
-	
-	this.anims.create({
-		key: "cube1_held",
-		frames: this.anims.generateFrameNumbers("cube1", {start: 2, end: 3}),
-		frameRate: 2,
-		repeat: -1
-	});
-	
 	/* Initialize input handler. */
 	input = this.input.keyboard.addKeys({
 		"SPACE": Phaser.Input.Keyboard.KeyCodes.SPACE,
@@ -99,7 +72,15 @@ function create(){
 	
 	/* Create platforms. */
 	for(let index = 0; index < 100; index++){
-		let platform = new Platform(this, Phaser.Math.Between(-this.game.canvas.width / 2, this.game.canvas.width / 2), index * -200);
+		let platform;
+		switch(Phaser.Math.Between(0, 4)){
+			case 0:
+				platform = new BouncyPlatform(this, Phaser.Math.Between(-this.game.canvas.width / 2, this.game.canvas.width / 2), index * -200);
+				break;
+			default:
+				platform = new Platform(this, Phaser.Math.Between(-this.game.canvas.width / 2, this.game.canvas.width / 2), index * -200);
+				break;
+		}
 		this.add.existing(platform);
 		platforms.add(platform);
 	}
