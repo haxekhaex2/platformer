@@ -43,7 +43,6 @@ export default class Platform extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	static deserialize(scene, data){
-		console.log(data);
 		return new Platform(scene, data.x, data.y);
 	}
 	
@@ -60,7 +59,7 @@ export default class Platform extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
-	collide(object){
+	onOverlap(object){
 		return true;
 	}
 	

@@ -46,9 +46,12 @@ export default class WorldScene extends Phaser.Scene{
 		this.physics.world.collide(this.physics.world.bodies.entries.concat(this.physics.world.staticBodies.entries).reduce((acc, current) => {
 			if(current.gameObject && current.enable) acc.push(current.gameObject);
 			return acc;
-		}, new Array()), null, null, (a, b) => {
-			let ac = a.collide ? a.collide(b) : true;
-			let bc = b.collide ? b.collide(a) : true;
+		}, new Array()), null, (a, b) => {
+			a.onCollide?.(b);
+			b.onCollide?.(a);
+		}, (a, b) => {
+			let ac = a.onOverlap ? a.onOverlap(b) : true;
+			let bc = b.onOverlap ? b.onOverlap(a) : true;
 			return ac && bc;
 		}, this);
 		this.children.getChildren().forEach((element) => {element.update(time, delta);});

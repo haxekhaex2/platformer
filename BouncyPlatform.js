@@ -57,14 +57,15 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
-	collide(object){
-		if(object.body !== null && object.body.velocity.y > 0){
-			console.log(object.body.velocity.y);
+	onOverlap(object){
+		return true;
+	}
+	
+	onCollide(object){
+		if(object.body !== null && object.body.velocity.y >= 0){
 			object.body.setVelocityY(-2048);
 			this.scene.sound.play("boing");
-			return false;
 		}
-		return true;
 	}
 	
 	update(){

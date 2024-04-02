@@ -9,6 +9,7 @@ var config = {
 		default: "arcade",
 		arcade: {
 			gravity: {y: 2048},
+			debug: true
 		}
 	},
 	scene: window.world = new WorldScene(),
@@ -20,12 +21,3 @@ var config = {
 /* Globals. */
 let game = new Phaser.Game(config);
 window.game = game;
-
-(async function fucker(){
-	let map = new Map();
-	let foo = await import("./Platform.js");
-	let bar = await import("./Platform.js");
-	map.set("foo", foo);
-	map.set("bar", bar);
-	console.dir(foo === bar);
-})();

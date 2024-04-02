@@ -7,6 +7,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		super(scene, x, y, "bug");
 		scene.physics.world.enableBody(this);
 		this.setDisplaySize(50, 50);
+		this.setDepth(1);
 		scene.cameras.main.startFollow(this, true, .5, .5, 0, 0);
 		
 		this.dashTime = 0;
@@ -14,12 +15,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
-	collide(object){
+	onOverlap(object){
 		if(object.constructor === Platform || object.constructor === BouncyPlatform){
 			if(this.body.velocity.y < 0) return false;
 		}
-		console.log(object.constructor.name);
 		return true;
+	}
+	
+	onCollide(object){
+		console.log(object.constructor.name);
 	}
 	
 	update(time, delta){
@@ -39,7 +43,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 			this.scene.sound.play("jump");
 		}
 		
-		if(input.SHIFT.isDown && this.abilityAvailable && direction){
+		if(Phaser.Input.Keyboard.JustDown(	input.SHIFT) && this.abilityAvailable && direction){
 			this.setVelocityX(direction * 2048);
 			this.dashTime = .1;
 			this.abilityAvailable = false;
