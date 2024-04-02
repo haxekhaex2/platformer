@@ -1,5 +1,3 @@
-import Platform from "./Platform.js";
-import BouncyPlatform from "./BouncyPlatform.js";
 import Player from "./Player.js";
 
 export let input;
@@ -14,6 +12,10 @@ export default class WorldScene extends Phaser.Scene{
 		
 		this.load.spritesheet("cube0", "assets/cube0.png", {frameWidth: 200, frameHeight: 200});
 		this.load.spritesheet("cube1", "assets/cube1.png", {frameWidth: 200, frameHeight: 200});
+		this.load.spritesheet("idle", "assets/idle.png", {frameWidth: 500, frameHeight: 1000});
+		this.load.spritesheet("run", "assets/run.png", {frameWidth: 500, frameHeight: 1000});
+		this.load.spritesheet("rise", "assets/rise.png", {frameWidth: 500, frameHeight: 1000});
+		this.load.spritesheet("fall", "assets/fall.png", {frameWidth: 500, frameHeight: 1000});
 		
 		/* Load audio. */
 		this.load.audio("jump", "assets/jump.wav");
@@ -29,7 +31,9 @@ export default class WorldScene extends Phaser.Scene{
 			"W": Phaser.Input.Keyboard.KeyCodes.W,
 			"A": Phaser.Input.Keyboard.KeyCodes.A,
 			"S": Phaser.Input.Keyboard.KeyCodes.S,
-			"D": Phaser.Input.Keyboard.KeyCodes.D
+			"D": Phaser.Input.Keyboard.KeyCodes.D,
+			"[": Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET,
+			"]": Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET
 		});
 		
 		/* Create starting platform. */
@@ -40,6 +44,7 @@ export default class WorldScene extends Phaser.Scene{
 		/* Create player. */
 		player = new Player(this, 50, -100);
 		this.add.existing(player);
+		window.player = player;
 	}
 
 	update(time, delta){
@@ -55,6 +60,9 @@ export default class WorldScene extends Phaser.Scene{
 			return ac && bc;
 		}, this);
 		this.children.getChildren().forEach((element) => {element.update(time, delta);});
+		
+		if(Phaser.Input.Keyboard.JustDown(input["["])) this.cameras.main.setZoom(this.cameras.main.zoom * .5);
+		if(Phaser.Input.Keyboard.JustDown(input["]"])) this.cameras.main.setZoom(this.cameras.main.zoom * 2);
 	}
 	
 	/* Deserialize all entities into world from text. */
