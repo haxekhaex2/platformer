@@ -1,4 +1,6 @@
-import {input} from "./script.js";
+import {input} from "./WorldScene.js";
+import BouncyPlatform from "./BouncyPlatform.js"
+import Platform from "./Platform.js"
 
 export default class Player extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y){
@@ -13,10 +15,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
 	collide(object){
-		if(object.constructor.name === "Platform" || object.constructor.name === "BouncyPlatform"){
+		if(object.constructor === Platform || object.constructor === BouncyPlatform){
 			if(this.body.velocity.y < 0) return false;
 		}
-		
+		console.log(object.constructor.name);
 		return true;
 	}
 	
@@ -32,7 +34,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		
 		if(input.S.isDown) this.setVelocityY(this.body.velocity.y + (delta / 1000) * 4096);
 		
-		if(Phaser.Input.Keyboard.JustDown(input.SPACE) && this.body.touching.down){
+		if(Phaser.Input.Keyboard.JustDown(input.SPACE) && (this.body.touching.down || this.body.blocked.down)){
 			this.setVelocityY(-1024);
 			this.scene.sound.play("jump");
 		}
@@ -44,6 +46,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 			this.scene.sound.play("jump");
 		}
 		
-		if(this.body.touching.down) this.abilityAvailable = true;
+		if(this.body.touching.down || this.body.blocked.down) this.abilityAvailable = true;
 	}
 }

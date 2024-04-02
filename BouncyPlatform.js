@@ -30,6 +30,20 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 		});
 	}
 	
+	serialize(object){
+		return {
+			path: import.meta.url,
+			data: {
+				x: this.x,
+				y: this.y
+			}
+		};
+	}
+	
+	static deserialize(scene, data){
+		return new BouncyPlatform(scene, data.x, data.y);
+	}
+	
 	preUpdate(time, delta){
 		super.preUpdate(time, delta);
 		if(this.body.touching.up){
@@ -45,8 +59,10 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 	/* Called when colliding with another object. Return true if a collision should occur. */
 	collide(object){
 		if(object.body !== null && object.body.velocity.y > 0){
-			object.setVelocityY(-2048);
+			console.log(object.body.velocity.y);
+			object.body.setVelocityY(-2048);
 			this.scene.sound.play("boing");
+			return false;
 		}
 		return true;
 	}
