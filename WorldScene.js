@@ -37,9 +37,10 @@ export default class WorldScene extends Phaser.Scene{
 		});
 		
 		/* Create starting platform. */
-		let startingPlatform = this.physics.add.staticImage(0, 200, "friend");
-		startingPlatform.setSize(this.game.canvas.width, 200);
+		let startingPlatform = this.physics.add.image(0, 200, "friend");
 		startingPlatform.setDisplaySize(this.game.canvas.width, 200);
+		startingPlatform.body.immovable = true;
+		startingPlatform.body.moves = false;
 		
 		/* Create player. */
 		player = new Player(this, 50, -100);
@@ -63,6 +64,14 @@ export default class WorldScene extends Phaser.Scene{
 		
 		if(Phaser.Input.Keyboard.JustDown(input["["])) this.cameras.main.setZoom(this.cameras.main.zoom * .5);
 		if(Phaser.Input.Keyboard.JustDown(input["]"])) this.cameras.main.setZoom(this.cameras.main.zoom * 2);
+	}
+	
+	async loadPrefab(text){
+		let prefab = JSON.parse(text);
+		let module = await import(prefab.path);
+		let object = module.default.deserialize(this, prefab.data);
+		this.add.existing(object);
+		return object;
 	}
 	
 	/* Deserialize all entities into world from text. */

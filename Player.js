@@ -1,12 +1,13 @@
 import {input} from "./WorldScene.js";
 import BouncyPlatform from "./BouncyPlatform.js"
 import Platform from "./Platform.js"
+import Entity from "./Entity.js"
 
-export default class Player extends Phaser.Physics.Arcade.Sprite{
+export default class Player extends Entity{
 	constructor(scene, x, y){
 		super(scene, x, y);
 		scene.physics.world.enableBody(this);
-		this.proportion(50, 25, -1/3, -1/8, 5/3, 10/8, "idle");
+		this.proportion(25, 50, -1/3, -1/8, 5/3, 10/8, "idle");
 		
 		this.setDepth(1);
 		scene.cameras.main.startFollow(this, true, .5, .5, 0, 0);
@@ -33,21 +34,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		this.anims.play("idle");
 	}
 	
-	/* Modify origin, offset, and scaling to move the given texture with the body as its basis.
-		w - width of the body.
-		h - height of the body.
-		tx - x of texture in relation to body.
-		ty - y of texture in relation to body.
-		tw - width of texture in relation to body.
-		ty - height of texture in relation to body. */
-	proportion(w, h, tx, ty, tw, th, texture){
-		this.setTexture(texture);
-		this.body.setSize(this.width / tw, this.height / th);
-		this.setDisplayOrigin(-(tx * this.width / tw) + this.body.width / 2, -(ty * this.height / th) + this.body.height / 2);
-		this.body.setOffset(this.width * this.originX - this.body.halfWidth, this.height * this.originY - this.body.halfHeight);
-		this.setScale(tw * h / this.frame.width, th * w / this.frame.height);
-	}
-	
 	/* Called when colliding with another object. Return true if a collision should occur. */
 	onOverlap(object){
 		if(object.constructor === Platform || object.constructor === BouncyPlatform){
@@ -57,7 +43,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	onCollide(object){
-		console.log(object.constructor.name);
 	}
 	
 	preUpdate(time, delta){
