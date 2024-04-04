@@ -2,9 +2,9 @@ import WorldScene from "./WorldScene.js";
 
 var config = {
 	type: Phaser.AUTO,
-	width: 864,
-	height: 480,
-	backgroundColor: 0xffffff,
+	width: 1280,
+	height: 720,
+	backgroundColor: 0xeeeeee,
 	physics: {
 		default: "arcade",
 		arcade: {

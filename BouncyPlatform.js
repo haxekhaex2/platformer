@@ -30,20 +30,6 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 		});
 	}
 	
-	serialize(object){
-		return {
-			path: import.meta.url,
-			data: {
-				x: this.x,
-				y: this.y
-			}
-		};
-	}
-	
-	static deserialize(scene, data){
-		return new BouncyPlatform(scene, data.x, data.y);
-	}
-	
 	preUpdate(time, delta){
 		super.preUpdate(time, delta);
 		if(this.body.touching.up){
@@ -56,7 +42,10 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 		}
 	}
 	
-	/* Called when colliding with another object. Return true if a collision should occur. */
+	update(){
+	}
+	
+	
 	onOverlap(object){
 		return true;
 	}
@@ -68,6 +57,18 @@ export default class BouncyPlatform extends Phaser.Physics.Arcade.Sprite{
 		}
 	}
 	
-	update(){
+	serialize(object){
+		return {
+			path: "/BouncyPlatform.js",
+			data: {
+				x: this.x,
+				y: this.y
+			}
+		};
 	}
+	
+	static deserialize(scene, data){
+		return new BouncyPlatform(scene, data.x, data.y);
+	}
+	
 }

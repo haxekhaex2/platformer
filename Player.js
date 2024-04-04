@@ -4,14 +4,48 @@ import Platform from "./Platform.js"
 
 export default class Player extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y){
-		super(scene, x, y, "bug");
+		super(scene, x, y);
 		scene.physics.world.enableBody(this);
-		this.setDisplaySize(50, 50);
+		this.proportion(50, 25, -1/3, -1/8, 5/3, 10/8, "idle");
+		
 		this.setDepth(1);
 		scene.cameras.main.startFollow(this, true, .5, .5, 0, 0);
 		
 		this.dashTime = 0;
 		this.abilityAvailable = false;
+		this.setInteractive();
+		
+		/* Load animations. */
+		this.anims.create({
+			key: "idle",
+			frames: this.anims.generateFrameNumbers("idle", {start: 0, end: 1}),
+			frameRate: 4,
+			repeat: -1 
+		});
+		
+		this.anims.create({
+			key: "run",
+			frames: this.anims.generateFrameNumbers("run", {start: 0, end: 7}),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+		this.anims.play("idle");
+	}
+	
+	/* Modify origin, offset, and scaling to move the given texture with the body as its basis.
+		w - width of the body.
+		h - height of the body.
+		tx - x of texture in relation to body.
+		ty - y of texture in relation to body.
+		tw - width of texture in relation to body.
+		ty - height of texture in relation to body. */
+	proportion(w, h, tx, ty, tw, th, texture){
+		this.setTexture(texture);
+		this.body.setSize(this.width / tw, this.height / th);
+		this.setDisplayOrigin(-(tx * this.width / tw) + this.body.width / 2, -(ty * this.height / th) + this.body.height / 2);
+		this.body.setOffset(this.width * this.originX - this.body.halfWidth, this.height * this.originY - this.body.halfHeight);
+		this.setScale(tw * h / this.frame.width, th * w / this.frame.height);
 	}
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
@@ -26,6 +60,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		console.log(object.constructor.name);
 	}
 	
+	preUpdate(time, delta){
+		super.preUpdate(time, delta);
+	}
+	
 	update(time, delta){
 		/* Input handling. */
 		let direction = 0;
@@ -36,6 +74,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		this.dashTime -= delta / 1000;
 		if(this.dashTime < 0) this.dashTime = 0;
 		
+		if(this.body.touching.down || this.body.blocked.down){
+			if(direction){
+				this.anims.play("run", true);
+				if(direction < 0) this.setFlipX(true);
+				else this.setFlipX(false);
+			}else{
+				this.anims.play("idle", true);
+			}
+		}else{
+			if(direction < 0) this.setFlipX(true);
+			else this.setFlipX(false);
+			if(this.body.velocity.y < 0) this.setTexture("rise");
+			else this.setTexture("fall");
+		}
+		
 		if(input.S.isDown) this.setVelocityY(this.body.velocity.y + (delta / 1000) * 4096);
 		
 		if(Phaser.Input.Keyboard.JustDown(input.SPACE) && (this.body.touching.down || this.body.blocked.down)){
@@ -43,7 +96,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 			this.scene.sound.play("jump");
 		}
 		
-		if(Phaser.Input.Keyboard.JustDown(	input.SHIFT) && this.abilityAvailable && direction){
+		if(Phaser.Input.Keyboard.JustDown(input.SHIFT) && this.abilityAvailable && direction){
 			this.setVelocityX(direction * 2048);
 			this.dashTime = .1;
 			this.abilityAvailable = false;
@@ -51,5 +104,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite{
 		}
 		
 		if(this.body.touching.down || this.body.blocked.down) this.abilityAvailable = true;
+		
+		if(this.abilityAvailable) this.tint = 0xffffff;
+		else this.tint = 0xffeeee;
 	}
 }

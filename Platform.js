@@ -29,23 +29,6 @@ export default class Platform extends Phaser.Physics.Arcade.Sprite{
 		});
 	}
 	
-	/* Return an object with three properties:
-		path - path to the module wherein this class is defined.
-		data - arbitrary written object to be deserialized later. */ 
-	serialize(object){
-		return {
-			path: "./Platform.js",
-			data: {
-				x: this.x,
-				y: this.y
-			}
-		};
-	}
-	
-	static deserialize(scene, data){
-		return new Platform(scene, data.x, data.y);
-	}
-	
 	preUpdate(time, delta){
 		super.preUpdate(time, delta);
 		if(this.body.touching.up){
@@ -58,11 +41,27 @@ export default class Platform extends Phaser.Physics.Arcade.Sprite{
 		}
 	}
 	
-	/* Called when colliding with another object. Return true if a collision should occur. */
+	update(){
+	}
+	
 	onOverlap(object){
 		return true;
 	}
 	
-	update(){
+	/* Return an object with three properties:
+		path - path to the module wherein this class is defined.
+		data - arbitrary written object to be deserialized later. */ 
+	serialize(object){
+		return {
+			path: "/Platform.js",
+			data: {
+				x: this.x,
+				y: this.y
+			}
+		};
+	}
+	
+	static deserialize(scene, data){
+		return new Platform(scene, data.x, data.y);
 	}
 }
