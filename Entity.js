@@ -11,10 +11,26 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite{
 		tw - width of texture in relation to body.
 		ty - height of texture in relation to body. */
 	proportion(w, h, tx, ty, tw, th, texture){
+		let x = this.body.center.x;
+		let y = this.body.center.y;
+		
 		this.setTexture(texture);
-		this.body.setSize(this.width / tw, this.height / th);
-		this.setDisplayOrigin(-(tx * this.width / tw) + this.body.width / 2, -(ty * this.height / th) + this.body.height / 2);
-		this.body.setOffset(this.width * this.originX - this.body.halfWidth, this.height * this.originY - this.body.halfHeight);
-		this.setScale(tw * w / this.frame.width, th * h / this.frame.height);
+		this.setOrigin(.5, .5);
+		this.setScale(1 / this.frame.width, 1 / this.frame.height);
+		this.body.setSize(1 / this.scaleX, 1 / this.scaleY, false);
+		
+		/* Move origin to where it should be relative to texture. */
+		this.setDisplayOrigin(-1 * tx / this.scaleX / tw, -1 * ty / this.scaleY / th);
+		
+		/* Move top left of body to origin center. */
+		this.body.setOffset(-1 * tx / this.scaleX, -1 * ty / this.scaleY);
+		
+		/* Scale texture width and height. */
+		this.setScale(this.scaleX * tw, this.scaleY * th);
+		this.body.setSize(this.body.width / tw, this.body.height / th, false);
+		this.body.setOffset(this.body.offset.x / tw, this.body.offset.y / th);
+		
+		/* Scale by body width and height. */
+		this.setScale(this.scaleX * w, this.scaleY * h);
 	}
 }
