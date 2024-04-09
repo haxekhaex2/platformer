@@ -34,7 +34,7 @@ export default class WorldScene extends Phaser.Scene{
 			"D": Phaser.Input.Keyboard.KeyCodes.D,
 			"[": Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET,
 			"]": Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET
-		});
+		}, false);
 		
 		/* Create starting platform. */
 		let startingPlatform = this.physics.add.image(0, 200, "friend");
@@ -43,7 +43,7 @@ export default class WorldScene extends Phaser.Scene{
 		startingPlatform.body.moves = false;
 		
 		/* Create player. */
-		player = new Player(this, 50, -100);
+		player = new Player(this, 50, -200);
 		this.add.existing(player);
 		window.player = player;
 	}

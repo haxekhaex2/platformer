@@ -8,7 +8,6 @@ const CUBE_HEIGHT = 200;
 export default class BouncyPlatform extends Entity{
 	constructor(scene, x, y){
 		super(scene, x, y, "cube0");
-		scene.physics.world.enableBody(this);
 		this.proportion(200, 20, 0, -2.5, 1, 10, "cube0");
 		this.body.moves = false;
 		this.body.immovable = true;

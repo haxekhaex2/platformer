@@ -1,6 +1,22 @@
 export default class Entity extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y){
 		super(scene, x, y);
+		scene.physics.world.enableBody(this);
+		this.proportion(32, 32, 0, 0, 1, 1, "friend");
+	}
+	
+	serialize(object){
+		return {
+			path: "/Entity.js",
+			data: {
+				x: this.x,
+				y: this.y
+			}
+		};
+	}
+	
+	static deserialize(scene, data){
+		return new Entity(scene, data.x, data.y);
 	}
 	
 	/* Modify origin, offset, and scaling to move the given texture with the body as its basis.

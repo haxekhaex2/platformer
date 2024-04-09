@@ -7,7 +7,8 @@ var config = {
 		default: "arcade",
 		arcade: {
 			gravity: {y: 2048},
-			debug: true
+			debug: true,
+			overlapBias: 32
 		}
 	},
 	scene: window.world = new WorldScene(),
@@ -21,11 +22,11 @@ var config = {
 let game = new Phaser.Game(config);
 window.game = game;
 
-let spawnData = "{\n\t\"path\": \"/BouncyPlatform.js\",\n\t\"data\": {\n\t\t\"x\": 0,\n\t\t\"y\": 0\n\t}\n}";
 let spawnMode;
 
 document.querySelector("canvas").addEventListener("click", (event) => {
 	let point = world.cameras.main.getWorldPoint(event.clientX, event.clientY);
+	let spawnData = document.getElementById("spawnData").value;
 	window.world.loadPrefab(spawnData).then((object) => {
 		object.setPosition(point.x, point.y);
 	});

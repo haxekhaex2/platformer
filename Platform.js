@@ -6,7 +6,6 @@ const CUBE_HEIGHT = 200;
 export default class Platform extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y){
 		super(scene, x, y, "cube0");
-		scene.physics.world.enableBody(this);
 		this.setSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
 		this.setOffset(0, CUBE_HEIGHT / 4);
 		this.body.moves = false;

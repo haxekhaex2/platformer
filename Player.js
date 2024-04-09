@@ -6,7 +6,6 @@ import Entity from "./Entity.js"
 export default class Player extends Entity{
 	constructor(scene, x, y){
 		super(scene, x, y);
-		scene.physics.world.enableBody(this);
 		this.proportion(25, 50, -1/3, -1/8, 5/3, 10/8, "idle");
 		
 		this.setDepth(1);
