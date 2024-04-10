@@ -25,9 +25,27 @@ window.game = game;
 let spawnMode;
 
 document.querySelector("canvas").addEventListener("click", (event) => {
-	let point = world.cameras.main.getWorldPoint(event.clientX, event.clientY);
-	let spawnData = document.getElementById("spawnData").value;
-	window.world.loadPrefab(spawnData).then((object) => {
-		object.setPosition(point.x, point.y);
-	});
+		let point = world.cameras.main.getWorldPoint(event.clientX, event.clientY);
+	switch(document.getElementById("spawnMode").value){
+		case "spawn":
+			let spawnData = document.getElementById("spawnData").value;
+			window.world.loadPrefab(spawnData).then((object) => {
+				object.setPosition(point.x, point.y);
+			});
+			break;
+		case "delete":
+			world.children.getChildren().forEach((element) => {
+				if(element.body){
+					if(point.x >= element.body.x){
+						if(point.y >= element.body.y){
+							if(point.x <= element.body.x + element.body.width){
+								if(point.y <= element.body.y + element.body.height){
+									element.destroy();
+								}
+							}
+						}
+					}
+				}
+			});
+	}
 });

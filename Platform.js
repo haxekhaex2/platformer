@@ -1,13 +1,14 @@
+import Entity from "/Entity.js";
+
 const PLATFORM_WIDTH = 200;
 const PLATFORM_HEIGHT = 20;
 const CUBE_WIDTH = 200;
 const CUBE_HEIGHT = 200;
 
-export default class Platform extends Phaser.Physics.Arcade.Sprite{
+export default class Platform extends Entity{
 	constructor(scene, x, y){
 		super(scene, x, y, "cube0");
-		this.setSize(PLATFORM_WIDTH, PLATFORM_HEIGHT);
-		this.setOffset(0, CUBE_HEIGHT / 4);
+		this.proportion(200, 20, 0, -2.5, 1, 10, "cube0");
 		this.body.moves = false;
 		this.body.immovable = true;
 		if(Phaser.Math.Between(0, 1) === 0) this.flipX = true;

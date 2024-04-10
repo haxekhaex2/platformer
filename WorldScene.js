@@ -78,11 +78,16 @@ export default class WorldScene extends Phaser.Scene{
 	async loadWorld(text){
 		let modules = new Map();
 		let array = JSON.parse(text);
+		let gameObjects = new Array();
 		
 		for(let element of array){
 			if(!modules.has(element.path)) modules.set(element.path, await import(element.path));
-			this.add.existing(modules.get(element.path).default.deserialize(this, element.data));
+			let gameObject = modules.get(element.path).default.deserialize(this, element.data);
+			gameObjects.push(gameObject);
+			this.add.existing(gameObject);
 		}
+		
+		return gameObjects;
 	}
 	
 	/* Return a text representation of all serializable entities. */

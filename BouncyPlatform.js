@@ -31,14 +31,6 @@ export default class BouncyPlatform extends Entity{
 	
 	preUpdate(time, delta){
 		super.preUpdate(time, delta);
-		/* if(this.body.touching.up){
-			this.anims.play("held", true);
-			if(!this.held) this.scene.sound.play("land");
-			this.held = true;
-		}else{
-			this.anims.play("default", true);
-			this.held = false;
-		} */
 	}
 	
 	update(){
