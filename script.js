@@ -31,6 +31,7 @@ document.querySelector("canvas").addEventListener("click", (event) => {
 			let spawnData = document.getElementById("spawnData").value;
 			window.world.loadPrefab(spawnData).then((object) => {
 				object.setPosition(point.x, point.y);
+				object.move(point.x, point.y);
 			});
 			break;
 		case "delete":
