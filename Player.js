@@ -1,5 +1,6 @@
 import {input} from "./WorldScene.js";
 import BouncyPlatform from "./BouncyPlatform.js"
+import FragilePlatform from "./FragilePlatform.js"
 import Platform from "./Platform.js"
 import Entity from "./Entity.js"
 
@@ -35,7 +36,7 @@ export default class Player extends Entity{
 	
 	/* Called when colliding with another object. Return true if a collision should occur. */
 	onOverlap(object){
-		if(object.constructor === Platform || object.constructor === BouncyPlatform){
+		if(object.constructor === Platform || object.constructor === BouncyPlatform || object.constructor === FragilePlatform){
 			if(this.body.velocity.y < 0) return false;
 		}
 		return true;
