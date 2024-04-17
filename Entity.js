@@ -5,7 +5,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite{
 		this.proportion(32, 32, 0, 0, 1, 1, "friend");
 	}
 	
-	serialize(object){
+	serialize(){
 		return {
 			path: "/Entity.js",
 			data: {
