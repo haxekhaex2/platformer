@@ -20,10 +20,9 @@ export default class Background extends Entity{
 		super.update(time, delta);
 		let camera = this.scene.cameras.main;
 		let point = camera.getWorldPoint(camera.x, camera.y);
-		this.tileSprite.setTilePosition((this.tileSprite.x - point.x) * camera.width / camera.displayWidth, (this.tileSprite.y - point.y) * camera.height / camera.displayHeight);
+		this.tileSprite.setTilePosition((this.tileSprite.x - point.x) * camera.width / camera.displayWidth * this.parallax, (this.tileSprite.y - point.y) * camera.height / camera.displayHeight * this.parallax);
 		this.tileSprite.setScale(camera.displayWidth / camera.width, camera.displayHeight / camera.height);
 		this.tileSprite.setPosition(point.x + camera.displayWidth / 2, point.y + camera.displayHeight / 2);
-		//this.tileSprite.setTileScale(this.tileWidth / this.tileSprite.frame.width, this.tileHeight / this.tileSprite.frame.height);
 		console.log(this.tileWidth / this.tileSprite.frame.width * this.tileSprite.frame.width);
 	}
 	
