@@ -21,6 +21,11 @@ export default class WorldScene extends Phaser.Scene{
 		this.load.audio("jump", "assets/jump.wav");
 		this.load.audio("land", "assets/land.wav");
 		this.load.audio("boing", "assets/boing.wav");
+		
+		this.input.on("pointerup", (pointer) => {
+			let point = world.cameras.main.getWorldPoint(pointer.x, pointer.y);
+			this.processClick(point.x, point.y);
+		});
 	}
 
 	create(){
@@ -97,5 +102,32 @@ export default class WorldScene extends Phaser.Scene{
 			else console.warn(element.constructor.name + " is not serializable!");
 			return accumulator;
 		}, new Array()), null, "\t");
+	}
+	
+	processClick(worldx, worldy){
+		let point = {x: worldx, y: worldy};
+		switch(document.getElementById("spawnMode").value){
+			case "spawn":
+				let spawnData = document.getElementById("spawnData").value;
+				window.world.loadPrefab(spawnData).then((object) => {
+					object.setPosition(point.x, point.y);
+					object.move(point.x, point.y);
+				});
+				break;
+			case "delete":
+				world.children.getChildren().forEach((element) => {
+					if(element.body){
+						if(point.x >= element.body.x){
+							if(point.y >= element.body.y){
+								if(point.x <= element.body.x + element.body.width){
+									if(point.y <= element.body.y + element.body.height){
+										element.destroy();
+									}
+								}
+							}
+						}
+					}
+				});
+		}
 	}
 }
