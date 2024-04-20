@@ -48,9 +48,12 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite{
 		
 		/* Scale by body width and height. */
 		this.setScale(this.scaleX * w, this.scaleY * h);
+		//this.move(x, y);
+		//console.log("foo");
 	}
 	
 	move(x, y){
+		this.scene.add.rectangle(x, y, 8, 8, 0x00FFFF, .5);
 		this.setPosition(x - this.body.halfWidth, y - this.body.halfHeight);
 	}
 }

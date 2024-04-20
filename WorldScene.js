@@ -106,6 +106,7 @@ export default class WorldScene extends Phaser.Scene{
 	
 	processClick(worldx, worldy){
 		let point = {x: worldx, y: worldy};
+		this.add.rectangle(point.x, point.y, 4, 4, 0xff0000, 1);
 		switch(document.getElementById("spawnMode").value){
 			case "spawn":
 				let spawnData = document.getElementById("spawnData").value;
